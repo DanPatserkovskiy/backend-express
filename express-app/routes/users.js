@@ -21,9 +21,20 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/:id', function(req, res, next) {
+  const {id} = req.params;
+  db.all("SELECT id, name FROM users WHERE id = ?", [id], (err, rows) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(rows);
+    }
+  });
+});
+
 router.post('/', function (req, res, next) {
   const {name} = req.body;
-  if (!req.body.name || !req.body.email) {
+  if (!req.body.name) {
     return res.status(400).json({
       message: "Пользователь не обнаружен"
     })
